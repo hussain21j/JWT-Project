@@ -25,7 +25,7 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.keys.EllipticCurves;
 import org.jose4j.lang.JoseException;
 
-public class Client {
+public class JWTGenerator {
 	public static void main(String[] args) throws JoseException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException {
 		System.out.println(
 				"***************************Preapre building the JWT*******************************************");
@@ -62,10 +62,13 @@ public class Client {
 
 		/* ***************************************signing***********************************************
 		 * ********************************************************************************************/
-		/*RsaJsonWebKey jsonSignKey = RsaJwkGenerator.generateJwk(2048);
-		RsaJsonWebKey jsonSignKey = keyGenerators.getPrivateKey(pathOfSignatureFile);
-		System.out.println("privagte key :"+jsonSignKey.getPrivateKey());*/
+		RsaJsonWebKey jsonSignKey = RsaJwkGenerator.generateJwk(2048);
+		System.out.println("privagte key :"+jsonSignKey.getPrivateKey());
+		
+		/*Variable to hold the path of private key file with extension .p12, Update it as per file in system */
 		String pathOfSignatureFile = "D:/PKI/output.p12";
+		
+		/*Variable to hold the password of  key file with extension .p12, Update it as per file in system */
 		String passwordOfP12PFXFile = "password";
 		
 		KeyStore keyStore = KeyStore.getInstance("PKCS12");
@@ -83,8 +86,8 @@ public class Client {
 		jws.setPayload(claims.toJson());
 
 		/* The JWT is signed using the private key */
-		//jws.setKey(jsonSignKey.getPrivateKey());
-		jws.setKey(privatetKey);
+		jws.setKey(jsonSignKey.getPrivateKey());
+		//jws.setKey(privatetKey);
 		
 		/*
 		 * Set the signature algorithm on the JWT/JWS that will integrity
